@@ -6,6 +6,15 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 from bs4 import BeautifulSoup
 import csv
+from github import Github
+
+# Set up GitHub credentials
+ACCESS_TOKEN = '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'
+g = Github(ACCESS_TOKEN)
+
+# Set up repository information
+REPO_OWNER = 'VellummyilumVinoth'
+REPO_NAME = 'Ballerina_Examples_By_Web_Scrapping'
 
 url = 'https://ballerina.io/learn/by-example'
 url1 = 'https://ballerina.io'
@@ -45,15 +54,18 @@ for a_tag in a_tags:
 
             extracted_codes = ''.join([element.get_text() for element in code_elements])
    
-    
             # Save the codes to a file
-
-            with open(f"{href.split('/')[-1]}.bal", 'w') as f:
+            filename = f"{href.split('/')[-1]}.bal"
+            with open(filename, 'w') as f:
                f.write(extracted_codes)
-            print(f"The codes have been saved to {href.split('/')[-1]}.bal")
-
+            print(f"The codes have been saved to {filename}")
+            
+            # Push the file to GitHub
+            repo = g.get_user(REPO_OWNER).get_repo(REPO_NAME)
+            with open(filename, 'r') as f:
+                content = f.read()
+            repo.create_file(filename, f"Add {filename}", content)
+            print(f"{filename} has been pushed to {REPO_OWNER}/{REPO_NAME}")
+            
         else:
             print('Code not found')
-            
-            
-
