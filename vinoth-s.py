@@ -9,7 +9,7 @@ import csv
 from github import Github
 
 # Set up GitHub credentials
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = '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'
 g = Github(ACCESS_TOKEN)
 
 # Set up repository information
@@ -43,7 +43,8 @@ for a_tag in a_tags:
             code = match.group(1)
             code_lines = code.split('\\n')
     
-            code = ''.join(code_lines)
+            code = '\n'.join(code_lines)  # Add newline character between lines
+            
             pattern = re.compile(r'<.*?>')
             code = pattern.sub('', code)
             code = bytes(code, "utf-8").decode("unicode_escape")
@@ -52,8 +53,8 @@ for a_tag in a_tags:
 
             code_elements = soup.find_all('span', {'class': 'line'})
 
-            extracted_codes = ''.join([element.get_text() for element in code_elements])
-   
+            extracted_codes = '\n'.join([element.get_text() for element in code_elements])
+            
             # Save the codes to a file
             filename = f"{href.split('/')[-1]}.bal"
             with open(filename, 'w') as f:
@@ -66,6 +67,7 @@ for a_tag in a_tags:
                 content = f.read()
             repo.create_file(filename, f"Add {filename}", content)
             print(f"{filename} has been pushed to {REPO_OWNER}/{REPO_NAME}")
-            
+
+        
         else:
             print('Code not found')
