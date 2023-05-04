@@ -1,0 +1,9 @@
+[build-options]
+  observabilityIncluded = true
+
+[package]
+  distribution = "2201.4.1"
+  name = "sampleapi"
+  org = "myvinothapp"
+  version = "0.1.0"
+
